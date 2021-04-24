@@ -1,5 +1,9 @@
 "use strict";
 
 exports.handler = async (event, context) => {
-    return 'Hello World!';
+    console.log(`Node version is: ${process.version}`);
+    return {
+        version: process.version,
+        env: process.env
+    };
 }
