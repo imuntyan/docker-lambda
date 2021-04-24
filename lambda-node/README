@@ -1,0 +1,20 @@
+1. Build the image
+
+docker build -t igor/lambda-node-test .
+
+2. Install Lambda Runtime Interface Emulator (RIE)
+
+mkdir -p ~/.aws-lambda-rie && \
+    curl -Lo ~/.aws-lambda-rie/aws-lambda-rie https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie && \
+    chmod +x ~/.aws-lambda-rie/aws-lambda-rie
+
+3. Run Lambda image function
+
+docker run -d -v ~/.aws-lambda-rie:/aws-lambda -p 9000:8080 \
+    --entrypoint /aws-lambda/aws-lambda-rie \
+    igor/lambda-node-test:latest \
+        /usr/local/bin/npx aws-lambda-ric app.handler
+
+4. Invoke function
+
+curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'
